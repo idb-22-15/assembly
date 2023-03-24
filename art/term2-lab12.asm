@@ -1,132 +1,140 @@
 %macro init 5
-	MOV AX, %1
-	MOV BX, %2
-	MOV CX, %3
-	MOV DX, %4
-	CALL %5
+	mov ax, %1
+	mov bx, %2
+	mov cx, %3
+	mov dx, %4
+	call %5
 %endmacro
 
 
-MYCODE: segment .code
+mycode: segment .code
 org 100h
-START:
+start:
 
-;init 15, 0, 0, 0, PROC1
-;init 1, 0, 0, 0, PROC2
-;init 72A8h, 0, 0, 0, PROC3
-;init 72A8h, 0, 0, 0, PROC4
-;init 1, 2, 3, 4, PROC5
-;init 0, 1234h, 0, 0, PROC6
-;init 0, 0, 0, 0, PROC7
-;init 7, 3, 0, 0, PROC8
-;init 2, 5, 3, 0, PROC9
+;init 15, 0, 0, 0, proc1
+;init 1, 0, 0, 0, proc2
+;init 72A8h, 0, 0, 0, proc3
+;init 72A8h, 0, 0, 0, proc4
+;init 1, 2, 3, 4, proc5
+;init 0, 1234h, 0, 0, proc6
+;init 0, 0, 0, 0, proc7
+;init 7, 3, 0, 0, proc8
+;init 2, 5, 3, 0, proc9
 
-mov AX, 4C00h
+mov ax, 4C00h
 int 21h
 
-PROC1:
-	;BX = 4 * AX
-	MOV BX, AX
-	SHL BX, 2
-RET
+proc1:
+	;bx = 4 * ax
+	mov bx, ax
+	shl bx, 2
+ret
 
 
-PROC2:
-	;BX = 5 * AX
-	MOV BX, AX
-	SHL BX, 2
-	ADD BX, AX
-RET
+proc2:
+	;bx = 5 * ax
+	mov bx, ax
+	shl bx, 2
+	add bx, ax
+ret
 
-PROC3:
-	AND AX, 0F000h
-RET
+proc3:
+	and ax, 0F000h
+ret
 
-PROC4:
-	AND AX, 0F000h
-	SHR AX, 8
-RET
+proc4:
+	and ax, 0F000h
+	SHR ax, 8
+ret
 
-PROC5:
-	;AX = 4*AX – 3*BX – CX + 11*DX
-	SHL AX, 2
+proc5:
+	;ax = 4*ax – 3*bx – cx + 11*dx
+	shl ax, 2
 	
-	SUB AX, CX
+	sub ax, cx
 	
-	SUB AX, BX
-	SHL BX, 1
-	SUB AX, BX
+	sub ax, bx
+	shl bx, 1
+	sub ax, bx
 	
-	SUB AX, DX
-	SHL DX, 3
-	ADD AX, DX
-	SHR DX, 1
-	ADD AX, DX
-RET
+	sub ax, dx
+	shl dx, 3
+	add ax, dx
+	SHR dx, 1
+	add ax, dx
+ret
 
-PROC6:
-	;BX = 1234h -> BX = 2341h
-	MOV AX, BX
-	AND AX, 0F000h
-	SHR AX, 12
+proc6:
+	;bx = 1234h -> bx = 2341h
+	mov ax, bx
+	and ax, 0F000h
+	SHR ax, 12
 
-	SHL BX, 4
+	shl bx, 4
 
-	OR BX, AX
-RET
+	OR bx, ax
+ret
 
-PROC7:
-	;DX -> 1100 1100 1100 1100b = CCCCh
-	MOV CX, 4
-	LOOP_START:
-		SHL DX, 1
-		INC DX
-		SHL DX, 1
-		INC DX
-		SHL DX, 2
-	LOOP LOOP_START
-RET
+proc7:
+	;dx -> 1100 1100 1100 1100b = CCCCh
+	mov cx, 4
+	loop_start:
+		shl dx, 1
+		INC dx
+		shl dx, 1
+		INC dx
+		shl dx, 2
+	loop loop_start
+ret
 
-PROC8:
-	;Заданы AX и BX, если  (BX + 4) = AX, 	то CX = 1111h, иначе CX = FFFFh.
-	ADD BX, 4
-	CMP BX, AX
+proc8:
+	;Заданы ax и bx, если  (bx + 4) = ax, 	то cx = 1111h, иначе cx = FFFFh.
+	add bx, 4
+	cmp bx, ax
 
-	JNZ NO
+	jnz no8
 	
-	MOV CX, 1111h
-	JMP END_IF
+	mov cx, 1111h
+	jmp end_if8
 
-	NO:
-		MOV CX, 0FFFFh
-		JMP END_IF
+	no8:
+		mov cx, 0FFFFh
+		jmp end_if8
 
-	END_IF:
-RET
+	end_if8:
+ret
 
-PROC9:
-	;Заданы AX, BX и CX, если (BX >= 5) and (AX <= CX) , то DX = 1111h, иначе DX = FFFFh
+proc9:
+	;Заданы ax, bx и cx, если (bx >= 5) and (ax <= cx) , то dx = 1111h, иначе dx = FFFFh
 
-	CMP BX, 5
-	JS NO2
+	cmp bx, 5
+	js no9
 	
-	CMP AX, CX
-	JS YES2
-	JNS IF2
+	cmp ax, cx
+	js yes9
+	jns in9
 
-	IF2:
-		CMP AX, CX
-		JZ YES2
-		JNZ NO2
+	if9:
+		cmp ax, cx
+		jz yes9
+		jnz no9
 	
-	YES2:
-		MOV DX, 1111h
-		JMP END_IF2
-	NO2:
-		MOV DX, 0FFFFh
-		JMP END_IF2
-	END_IF2:
-RET
+	yes9:
+		mov dx, 1111h
+		jmp end_if9
+	NO9:
+		mov dx, 0FFFFh
+		jmp end_if9
+	end_if9:
+ret
 
-PROC10:
-	
+proc10:
+	mov cx, 16
+	mov, bx, 0
+	loop10:
+		mov dx, ax
+		and dx, 0000000000000001b
+		add bx, dx
+		shr ax, 1
+		loop loop10
+ret
