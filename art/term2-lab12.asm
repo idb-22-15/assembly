@@ -44,7 +44,7 @@ ret
 
 proc4:
 	and ax, 0F000h
-	SHR ax, 8
+	shr ax, 8
 ret
 
 proc5:
@@ -60,7 +60,7 @@ proc5:
 	sub ax, dx
 	shl dx, 3
 	add ax, dx
-	SHR dx, 1
+	shr dx, 1
 	add ax, dx
 ret
 
@@ -68,7 +68,7 @@ proc6:
 	;bx = 1234h -> bx = 2341h
 	mov ax, bx
 	and ax, 0F000h
-	SHR ax, 12
+	shr ax, 12
 
 	shl bx, 4
 
@@ -80,9 +80,9 @@ proc7:
 	mov cx, 4
 	loop_start:
 		shl dx, 1
-		INC dx
+		inc dx
 		shl dx, 1
-		INC dx
+		inc dx
 		shl dx, 2
 	loop loop_start
 ret
