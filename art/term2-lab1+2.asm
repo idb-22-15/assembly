@@ -20,6 +20,7 @@ start:
 ;init 0, 0, 0, 0, proc7
 ;init 7, 3, 0, 0, proc8
 ;init 2, 5, 3, 0, proc9
+init 0FFFFh, 0, 0, 0, proc10
 
 mov ax, 4C00h
 int 21h
@@ -112,7 +113,7 @@ proc9:
 	
 	cmp ax, cx
 	js yes9
-	jns in9
+	jns if9
 
 	if9:
 		cmp ax, cx
@@ -122,19 +123,19 @@ proc9:
 	yes9:
 		mov dx, 1111h
 		jmp end_if9
-	NO9:
+	no9:
 		mov dx, 0FFFFh
 		jmp end_if9
 	end_if9:
 ret
 
 proc10:
-	mov cx, 16
-	mov, bx, 0
+	mov cx, 16 ;16 итераций
+	mov bx, 0 ;кол-во единиц
 	loop10:
-		mov dx, ax
-		and dx, 0000000000000001b
-		add bx, dx
-		shr ax, 1
+		mov dx, ax ;копируем
+		and dx, 0000000000000001b ;берём крайнее число
+		add bx, dx ;прибавляем
+		shr ax, 1 ;сдвигаем
 		loop loop10
 ret
