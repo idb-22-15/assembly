@@ -6,10 +6,8 @@
 	call %5
 %endmacro
 
-
-mycode: segment .code
+segment .code
 org 100h
-start:
 
 ;init 15, 0, 0, 0, proc1
 ;init 1, 0, 0, 0, proc2

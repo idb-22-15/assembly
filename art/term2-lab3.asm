@@ -6,10 +6,9 @@
 	call %5
 %endmacro
 
-;start
-mycode: segment .code
+segment .code
 org 100h
-start:
+
 
 ;;proc 24
 ; mov si, 0
