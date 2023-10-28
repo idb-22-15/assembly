@@ -49,13 +49,13 @@ ret
 proc5:
 	;ax = 4*ax – 3*bx – cx + 11*dx
 	shl ax, 2
-	
+
 	sub ax, cx
-	
+
 	sub ax, bx
 	shl bx, 1
 	sub ax, bx
-	
+
 	sub ax, dx
 	shl dx, 3
 	add ax, dx
@@ -92,7 +92,7 @@ proc8:
 	cmp bx, ax
 
 	jnz no8
-	
+
 	mov cx, 1111h
 	jmp end_if8
 
@@ -108,7 +108,7 @@ proc9:
 
 	cmp bx, 5
 	js no9
-	
+
 	cmp ax, cx
 	js yes9
 	jns if9
@@ -117,7 +117,7 @@ proc9:
 		cmp ax, cx
 		jz yes9
 		jnz no9
-	
+
 	yes9:
 		mov dx, 1111h
 		jmp end_if9

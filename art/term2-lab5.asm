@@ -41,11 +41,11 @@ ret
 
 proc45:
 	mov dl, 11
-    
+
 	cmp dl, 10
 	js not_gap45
 		add dl, 7
-        
+
 	not_gap45:
 	add dl, 48
 	mov byte[0], dl
@@ -110,7 +110,7 @@ proc48:
         inc si
 
         jmp do_while_string48
-        
+
     end_while48:
         mov byte[si], '$'
         print_str 0
@@ -135,7 +135,7 @@ proc49:
     reverse:
         mov al, byte[si]
         mov ah, byte[si + bx]
-        
+
         mov byte[si], ah
         mov byte[si + bx], al
         inc si
@@ -157,7 +157,7 @@ proc50:
     jns not_lower
 
     sub al, 32
-    
+
     not_lower:
         mov byte[0], al
         mov byte[1], '$'

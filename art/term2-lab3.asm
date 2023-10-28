@@ -116,7 +116,7 @@ proc28:
 		cmp ah, "["
 		jnz before28
 	dec si
-	
+
 	in28:
 		mov ah, byte[si]
 		cmp ah, "]"
@@ -150,7 +150,7 @@ proc29:
 
 		inc si
 		jmp in29
-		
+
 	endIn29:
 		inc si
 
@@ -212,5 +212,5 @@ proc31:
 			jmp findChar
 
 	endFindChar:
-	
+
 ret

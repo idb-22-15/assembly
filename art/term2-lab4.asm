@@ -90,7 +90,7 @@ ret
 
 proc36:
     mov dl, byte[a1]
-    
+
     mov ah, byte[a2]
     mov al, byte[a3]
 
@@ -103,7 +103,7 @@ proc36:
             add dl, 1
 
     not_carry36:
-    
+
     mov byte[c1], dl
     mov byte[c2], ah
     mov byte[c3], al
@@ -162,7 +162,7 @@ ret
 
 proc40:
     mov bl, byte[b1]
-    
+
     add byte[a5], bl
     jnc not_carry40
         add byte[a4], 1
@@ -201,7 +201,7 @@ proc41:
                     sub byte[a1], 1
 
     not_carry41:
-    
+
     mov al, byte[a1]
     mov byte[c1], al
     mov al, byte[a2]
