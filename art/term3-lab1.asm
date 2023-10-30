@@ -1,6 +1,9 @@
+org 100h
+
 STR_EMPTY equ 0
 STR_ADDR equ 0
 STR_MAX_LEN equ 32
+
 
 %macro init_registers 4
   mov si, 0
@@ -10,34 +13,21 @@ STR_MAX_LEN equ 32
   mov dx, %4
 %endmacro
 
+
 %macro exit 0
   mov ah, 4Ch
   mov al, 00h
   int 21h
 %endmacro
 
-%macro push_regs 0
-  push si
-  push ax
-  push bx
-  push cx
-  push dx
-%endmacro
 
-%macro pop_regs 0
-  pop dx
-  pop ax
-  pop bx
-  pop cx
-  pop si
-%endmacro
-
-; input: 1 - string address
+; @param 1 - string address
 %macro init_string 1
   mov byte[%1], STR_EMPTY
 %endmacro
 
-; input: 1 - string address
+
+; @param 1 - string address
 %macro init_string_helloworld 1
   mov dword[%1], "hell"
   mov dword[%1 + 4], "o wo"
@@ -45,8 +35,8 @@ STR_MAX_LEN equ 32
 %endmacro
 
 
-; input:  1  - string address
-; output: dx - length
+; @param  1  - string address
+; @return dx - length
 %macro get_len 1
   push si
   push ax
@@ -57,37 +47,40 @@ STR_MAX_LEN equ 32
 %endmacro
 
 
-; input:  1 - string address
+; @param  1 - string address
 ;         2 - char
 %macro insert_back 2
-  push_regs
+  pusha
   mov si, %1
   mov bl, %2
   call insert_back_call
-  pop_regs
+  popa
 %endmacro
 
-; input:  1 - string address
+
+; @param  1 - string address
 ;         2 - char
 ;         3 - char position
 %macro insert_into 3
-  push_regs
+  pusha
   mov si, %1
   mov ah, %2
   mov al, %3
   call insert_into_call
-  pop_regs
+  popa
 %endmacro
 
-; input:  1 - string address
+
+; @param  1 - string address
 ;         2 - char
 %macro insert_forward 2
   insert_into %1, %2, 1
 %endmacro
 
-; input:  1  - string address
+
+; @param  1  - string address
 ;         2  - position
-; output: cx - bool
+; @return cx - bool
 %macro is_valid_position 2
   push ax
   push dx
@@ -106,7 +99,7 @@ STR_MAX_LEN equ 32
   js %%is_valid_position_end
   jz %%is_valid_position_end
 
-  ; ax >= len + 2
+  ; ax >= len + 1
   inc dx
   cmp ax, dx
   jns %%is_valid_position_end
@@ -121,10 +114,11 @@ STR_MAX_LEN equ 32
   pop ax
 %endmacro
 
-; input:  1  - char address
+
+; @param  1  - char address
 ;         2  - char
 ;         3  - char number
-; output: dh - char position (0 if not found, last if char number == 0)
+; @return dh - char position (0 if not found, last if char number == 0)
 ;         dl - char counter
 %macro find_char_pos 3
   push si
@@ -137,26 +131,27 @@ STR_MAX_LEN equ 32
   pop si
 %endmacro
 
-; input:  1  - address
+
+; @param  1  - address
 ;         2  - char
-; output: dl - char count
+; @return dl - char count
 %macro get_char_count 2
   find_char_pos %1, %2, 0
   mov dh, 0
 %endmacro
 
-; input:  1  - address
+
+; @param  1  - address
 ;         2  - char
-; output: dh - char last position
+; @return dh - char last position
 %macro find_char_last_pos 2
   find_char_pos %1, %2, 0
   mov dl, 0
 %endmacro
 
-org 100h
+
 section .code
 global _start
-
 _start:
   init_registers 0, 0, 0, 0
 
@@ -178,7 +173,6 @@ _start:
 init_string_by_si:
   mov byte[si], STR_EMPTY
   ret
-
 
 task1:
   mov si, 00h
@@ -213,80 +207,18 @@ task5:
 
 task6:
   init_string_helloworld STR_ADDR
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
-  insert_back STR_ADDR, "!"
+  mov cx, 50
+  task6_loop:
+    insert_back STR_ADDR, "!"
+    loop task6_loop
   ret
 
 task7:
   init_string_helloworld STR_ADDR
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
-  insert_forward STR_ADDR, "!"
+  mov cx, 50
+  task7_loop:
+    insert_forward STR_ADDR, "!"
+    loop task7_loop
   ret
 
 task8:
@@ -315,10 +247,104 @@ task12:
   ret
 
 
-; input:  si - address
+;@param  si - address
+;        cx - length
+fill_string_by_len:
+  push si
+  push cx
+
+  fill_string_by_len_loop:
+  mov byte[si], "#"
+  inc si
+  loop fill_string_by_len_loop
+
+  pop si
+  pop cx
+  ret
+
+
+;@param  si - string address
+;@return dx - length
+get_len_by_si:
+  push si
+  push ax
+
+  mov dx, 1
+
+  get_len_by_si_loop:
+    mov al, [si]
+    cmp al, STR_EMPTY
+    jz get_len_by_si_end
+
+    inc si
+    inc dx
+    jmp get_len_by_si_loop
+
+  get_len_by_si_end:
+  pop ax
+  pop si
+  ret
+
+
+; @param  si - string address
+;         bl - char
+insert_back_call:
+  pusha
+
+  get_len si
+  is_valid_position si, dx
+  cmp cx, 0
+  jz insert_back_call_end
+
+  add si, dx
+  dec si
+  mov byte[si], bl
+  mov byte[si + 1], STR_EMPTY
+
+  insert_back_call_end:
+  popa
+  ret
+
+
+; @param  si - address
+;         ah - char
+;         al - char position
+insert_into_call:
+  pusha
+
+  push ax
+  mov ah, 0
+  is_valid_position si, ax
+  pop ax
+  cmp cx, 0
+  jz insert_into_call_end
+
+  dec al
+  get_len si
+  mov cx, dx
+  sub cl, al
+  inc cx
+  add si, dx
+
+  insert_into_call_loop:
+    mov bh, [si]
+    mov byte[si + 1], bh
+    dec si
+    loop insert_into_call_loop
+
+  mov byte[si + 1], ah
+  popa
+  ret
+
+  insert_into_call_end:
+  popa
+  ret
+
+
+; @param  si - address
 ;         ah - char
 ;         al - char number
-; output: dh - char position (0 if not found, last if al == 0)
+; @return dh - char position (0 if not found, last if al == 0)
 ;         dl - char counter
 find_char_pos_call:
   push si
@@ -363,99 +389,3 @@ find_char_pos_call:
   pop ax
   pop si
   ret
-
-;input:  si - address
-;        cx - length
-fill_string_by_len:
-  push si
-  push cx
-
-  fill_string_by_len_loop:
-  mov byte[si], "#"
-  inc si
-  loop fill_string_by_len_loop
-
-  pop si
-  pop cx
-  ret
-
-
-
-;input:  si - string address
-;output: dx - length
-get_len_by_si:
-  push si
-  push ax
-
-  mov dx, 1
-
-  get_len_by_si_loop:
-    mov al, [si]
-    cmp al, STR_EMPTY
-    jz get_len_by_si_end
-
-    inc si
-    inc dx
-    jmp get_len_by_si_loop
-
-  get_len_by_si_end:
-  pop ax
-  pop si
-  ret
-
-
-; input:  si - string address
-;         bl - char
-insert_back_call:
-  push_regs
-
-  get_len si
-  is_valid_position si, dx
-  cmp cx, 0
-  jz insert_back_call_end
-
-  add si, dx
-  dec si
-  mov byte[si], bl
-  mov byte[si + 1], STR_EMPTY
-
-  insert_back_call_end:
-  pop_regs
-  ret
-
-
-; input:  si - address
-;         ah - char
-;         al - char position
-insert_into_call:
-  push_regs
-
-  push ax
-  mov ah, 0
-  is_valid_position si, ax
-  pop ax
-  cmp cx, 0
-  jz insert_into_call_end
-  ; dec al
-
-  dec al
-  get_len si
-  mov cx, dx
-  sub cl, al
-  inc cx
-  add si, dx
-
-  insert_into_call_loop:
-    mov bh, [si]
-    mov byte[si + 1], bh
-    dec si
-    loop insert_into_call_loop
-
-  mov byte[si + 1], ah
-  pop_regs
-  ret
-
-  insert_into_call_end:
-  pop_regs
-  ret
-
