@@ -1,5 +1,5 @@
 segment .code
-org 100h
+org     100h
 
 ; call proc33
 ; call proc34
@@ -12,8 +12,8 @@ org 100h
 ; call proc41
 ; call proc42
 
-mov ax, 4C00h
-int 21h
+mov     ax, 4C00h
+int     21h
 
 
 ;procedures
@@ -22,28 +22,28 @@ not_proc32:
     align 16, db 0
     db '=[MYDATA BEGIN]='
 
-    db 'A = ['
+    db    'A = ['
     a1 db 244
     a2 db 2
     a3 db 3
     a4 db 77
     a5 db 250
-    db ']'
+    db    ']'
     align 16, db 0
 
-    db 'B = ['
+    db    'B = ['
     b1 db 254
     b2 db 2
-    db ']'
+    db    ']'
     align 16, db 0
 
-    db 'C = ['
+    db    'C = ['
     c1 db 4
     c2 db 5
     c3 db 6
     c4 db 7
     c5 db 8
-    db ']'
+    db    ']'
     align 16, db 0
 
     times 16 db '='
@@ -175,21 +175,21 @@ proc40:
 
     not_carry40:
 
-    mov al, byte[a1]
+    mov al,       byte[a1]
     mov byte[c1], al
-    mov al, byte[a2]
+    mov al,       byte[a2]
     mov byte[c2], al
-    mov al, byte[a3]
+    mov al,       byte[a3]
     mov byte[c3], al
-    mov al, byte[a4]
+    mov al,       byte[a4]
     mov byte[c4], al
-    mov al, byte[a5]
+    mov al,       byte[a5]
     mov byte[c5], al
 ret
 
 
 proc41:
-    mov bl, byte[b1]
+    mov bl,       byte[b1]
     sub byte[a5], bl
     jnc not_carry41
         sub byte[a4], 1
@@ -202,15 +202,15 @@ proc41:
 
     not_carry41:
 
-    mov al, byte[a1]
+    mov al,       byte[a1]
     mov byte[c1], al
-    mov al, byte[a2]
+    mov al,       byte[a2]
     mov byte[c2], al
-    mov al, byte[a3]
+    mov al,       byte[a3]
     mov byte[c3], al
-    mov al, byte[a4]
+    mov al,       byte[a4]
     mov byte[c4], al
-    mov al, byte[a5]
+    mov al,       byte[a5]
     mov byte[c5], al
 ret
 

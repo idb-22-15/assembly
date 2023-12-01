@@ -1,13 +1,13 @@
 %macro init 5
-	mov ax, %1
-	mov bx, %2
-	mov cx, %3
-	mov dx, %4
+	mov  ax, %1
+	mov  bx, %2
+	mov  cx, %3
+	mov  dx, %4
 	call %5
 %endmacro
 
 segment .code
-org 100h
+org     100h
 
 ;init 15, 0, 0, 0, proc1
 ;init 1, 0, 0, 0, proc2
@@ -20,8 +20,8 @@ org 100h
 ;init 2, 5, 3, 0, proc9
 init 0FFFFh, 0, 0, 0, proc10
 
-mov ax, 4C00h
-int 21h
+mov     ax, 4C00h
+int     21h
 
 proc1:
 	;bx = 4 * ax
@@ -107,15 +107,15 @@ proc9:
 	;Заданы ax, bx и cx, если (bx >= 5) and (ax <= cx) , то dx = 1111h, иначе dx = FFFFh
 
 	cmp bx, 5
-	js no9
+	js  no9
 
 	cmp ax, cx
-	js yes9
+	js  yes9
 	jns if9
 
 	if9:
 		cmp ax, cx
-		jz yes9
+		jz  yes9
 		jnz no9
 
 	yes9:
@@ -129,11 +129,11 @@ ret
 
 proc10:
 	mov cx, 16 ;16 итераций
-	mov bx, 0 ;кол-во единиц
+	mov bx, 0  ;кол-во единиц
 	loop10:
-		mov dx, ax ;копируем
-		and dx, 0000000000000001b ;берём крайнее число
-		add bx, dx ;прибавляем
-		shr ax, 1 ;сдвигаем
+		mov  dx, ax ;копируем
+		and  dx, 1  ;берём крайнее число
+		add  bx, dx ;прибавляем
+		shr  ax, 1  ;сдвигаем
 		loop loop10
 ret

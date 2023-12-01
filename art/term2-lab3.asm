@@ -1,13 +1,13 @@
 %macro init 5
-	mov ax, %1
-	mov bx, %2
-	mov cx, %3
-	mov dx, %4
+	mov  ax, %1
+	mov  bx, %2
+	mov  cx, %3
+	mov  dx, %4
 	call %5
 %endmacro
 
 segment .code
-org 100h
+org     100h
 
 
 ;;proc 24
@@ -57,17 +57,17 @@ org 100h
 
 
 ;	end
-mov ax, 4C00h
-int 21h
+mov     ax, 4C00h
+int     21h
 
 proc24:
-	mov word[si], "[ "
-	mov dword[si + 2], "Nabo"
-	mov dword[si + 6], "ishi"
+	mov word[si],       "[ "
+	mov dword[si + 2],  "Nabo"
+	mov dword[si + 6],  "ishi"
 	mov dword[si + 10], "kov "
 	mov dword[si + 14], "Arte"
 	mov dword[si + 18], "miy "
-	mov word[si + 22], "]"
+	mov word[si + 22],  "]"
 ret
 
 proc25:
@@ -75,8 +75,8 @@ proc25:
 	mov cx, bx
 
 	loop25:
-		mov byte[si], "#"
-		inc si
+		mov  byte[si], "#"
+		inc  si
 		loop loop25
 ret
 
@@ -89,8 +89,8 @@ proc26:
 	mov cx, bx
 
 	loop26:
-		mov byte[si], "#"
-		inc si
+		mov  byte[si], "#"
+		inc  si
 		loop loop26
 ret
 
@@ -120,7 +120,7 @@ proc28:
 	in28:
 		mov ah, byte[si]
 		cmp ah, "]"
-		jz endIn28
+		jz  endIn28
 
 		mov byte[si], "#"
 		inc si
@@ -136,7 +136,7 @@ proc29:
 	before29:
 		mov ah, byte[si]
 		cmp ah, "["
-		jz endBefore29
+		jz  endBefore29
 
 		mov byte[si], "#"
 		inc si
@@ -146,7 +146,7 @@ proc29:
 	in29:
 		mov ah, byte[si]
 		cmp ah, "]"
-		jz endIn29
+		jz  endIn29
 
 		inc si
 		jmp in29
@@ -156,7 +156,7 @@ proc29:
 
 	after29:
 		cmp si, 50h
-		jz endAfter29
+		jz  endAfter29
 
 		mov byte[si], "#"
 		inc si
@@ -167,13 +167,13 @@ proc29:
 ret
 
 proc30:
-	mov bx, si; начало строки
-	mov cx, 0; длина строки со скобками
+	mov bx, si ; начало строки
+	mov cx, 0  ; длина строки со скобками
 
 	findLength:
 		mov ah, byte[si]
 		cmp ah, "]"
-		jz endFindLength
+		jz  endFindLength
 
 		inc cx
 		inc si
@@ -186,10 +186,10 @@ proc30:
 	add si, 10
 
 	loopCopy30:
-		mov ah, byte[bx]
-		mov byte[si], ah
-		inc si
-		inc bx
+		mov  ah,       byte[bx]
+		mov  byte[si], ah
+		inc  si
+		inc  bx
 		loop loopCopy30
 ret
 
@@ -197,11 +197,11 @@ proc31:
 	findChar:
 		mov ah, byte[si]
 		cmp ah, "]"
-		jz endFindChar
+		jz  endFindChar
 
 		cmp ah, dh
 
-		jz addToCount
+		jz  addToCount
 		jnz notAddToCount
 
 		addToCount:

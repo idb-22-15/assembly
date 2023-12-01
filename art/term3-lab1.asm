@@ -1,7 +1,7 @@
 org 100h
 
-STR_EMPTY equ 0
-STR_ADDR equ 0
+STR_EMPTY   equ 0
+STR_ADDR    equ 0
 STR_MAX_LEN equ 32
 
 
@@ -29,7 +29,7 @@ STR_MAX_LEN equ 32
 
 ; @param 1 - string address
 %macro init_string_helloworld 1
-  mov dword[%1], "hell"
+  mov dword[%1],     "hell"
   mov dword[%1 + 4], "o wo"
   mov dword[%1 + 8], "rld"
 %endmacro
@@ -40,10 +40,10 @@ STR_MAX_LEN equ 32
 %macro get_len 1
   push si
   push ax
-  mov si, %1
+  mov  si, %1
   call get_len_by_si
-  pop ax
-  pop si
+  pop  ax
+  pop  si
 %endmacro
 
 
@@ -51,8 +51,8 @@ STR_MAX_LEN equ 32
 ;         2 - char
 %macro insert_back 2
   pusha
-  mov si, %1
-  mov bl, %2
+  mov  si, %1
+  mov  bl, %2
   call insert_back_call
   popa
 %endmacro
@@ -63,9 +63,9 @@ STR_MAX_LEN equ 32
 ;         3 - char position
 %macro insert_into 3
   pusha
-  mov si, %1
-  mov ah, %2
-  mov al, %3
+  mov  si, %1
+  mov  ah, %2
+  mov  al, %3
   call insert_into_call
   popa
 %endmacro
@@ -86,18 +86,18 @@ STR_MAX_LEN equ 32
   push dx
 
   get_len %1
-  mov ax, %2
+  mov     ax, %2
 
   mov cx, 0
 
   ; len >= max len
   cmp dx, STR_MAX_LEN
-  jz %%is_valid_position_end
+  jz  %%is_valid_position_end
 
   ; ax <= 0
   cmp ax, 0
-  js %%is_valid_position_end
-  jz %%is_valid_position_end
+  js  %%is_valid_position_end
+  jz  %%is_valid_position_end
 
   ; ax >= len + 1
   inc dx
@@ -105,7 +105,7 @@ STR_MAX_LEN equ 32
   jns %%is_valid_position_end
 
   cmp dx, ax
-  js %%is_valid_position_end
+  js  %%is_valid_position_end
 
   mov cx, 1
 
@@ -123,12 +123,12 @@ STR_MAX_LEN equ 32
 %macro find_char_pos 3
   push si
   push ax
-  mov si, %1
-  mov ah, %2
-  mov al, %3
+  mov  si, %1
+  mov  ah, %2
+  mov  al, %3
   call find_char_pos_call
-  pop ax
-  pop si
+  pop  ax
+  pop  si
 %endmacro
 
 
@@ -151,7 +151,7 @@ STR_MAX_LEN equ 32
 
 
 section .code
-global _start
+global  _start
 _start:
   init_registers 0, 0, 0, 0
 
@@ -175,11 +175,11 @@ init_string_by_si:
   ret
 
 task1:
-  mov si, 00h
+  mov  si, 00h
   call init_string_by_si
-  mov si, 20h
+  mov  si, 20h
   call init_string_by_si
-  mov si, 40h
+  mov  si, 40h
   call init_string_by_si
   ret
 
@@ -190,35 +190,35 @@ task2:
   ret
 
 task3:
-  mov si, STR_ADDR
-  mov cx, 14
+  mov  si, STR_ADDR
+  mov  cx, 14
   call fill_string_by_len
   ret
 
 task4:
   init_string_helloworld STR_ADDR
-  get_len STR_ADDR
+  get_len                STR_ADDR
   ret
 
 task5:
   init_string_helloworld STR_ADDR
-  insert_back STR_ADDR, "!"
+  insert_back            STR_ADDR, "!"
   ret
 
 task6:
   init_string_helloworld STR_ADDR
-  mov cx, 50
+  mov                    cx, 50
   task6_loop:
     insert_back STR_ADDR, "!"
-    loop task6_loop
+    loop        task6_loop
   ret
 
 task7:
   init_string_helloworld STR_ADDR
-  mov cx, 50
+  mov                    cx, 50
   task7_loop:
     insert_forward STR_ADDR, "!"
-    loop task7_loop
+    loop           task7_loop
   ret
 
 task8:
@@ -233,7 +233,7 @@ task9:
 
 task10:
   init_string_helloworld STR_ADDR
-  find_char_last_pos STR_ADDR, 'l'
+  find_char_last_pos     STR_ADDR, 'l'
   ret
 
 task11:
@@ -243,7 +243,7 @@ task11:
 
 task12:
   init_string_helloworld STR_ADDR
-  get_char_count STR_ADDR, "l"
+  get_char_count         STR_ADDR, "l"
   ret
 
 
@@ -254,8 +254,8 @@ fill_string_by_len:
   push cx
 
   fill_string_by_len_loop:
-  mov byte[si], "#"
-  inc si
+  mov  byte[si], "#"
+  inc  si
   loop fill_string_by_len_loop
 
   pop si
@@ -274,7 +274,7 @@ get_len_by_si:
   get_len_by_si_loop:
     mov al, [si]
     cmp al, STR_EMPTY
-    jz get_len_by_si_end
+    jz  get_len_by_si_end
 
     inc si
     inc dx
@@ -291,14 +291,14 @@ get_len_by_si:
 insert_back_call:
   pusha
 
-  get_len si
+  get_len           si
   is_valid_position si, dx
-  cmp cx, 0
-  jz insert_back_call_end
+  cmp               cx, 0
+  jz                insert_back_call_end
 
-  add si, dx
+  add si,           dx
   dec si
-  mov byte[si], bl
+  mov byte[si],     bl
   mov byte[si + 1], STR_EMPTY
 
   insert_back_call_end:
@@ -312,24 +312,24 @@ insert_back_call:
 insert_into_call:
   pusha
 
-  push ax
-  mov ah, 0
+  push              ax
+  mov               ah, 0
   is_valid_position si, ax
-  pop ax
-  cmp cx, 0
-  jz insert_into_call_end
+  pop               ax
+  cmp               cx, 0
+  jz                insert_into_call_end
 
-  dec al
+  dec     al
   get_len si
-  mov cx, dx
-  sub cl, al
-  inc cx
-  add si, dx
+  mov     cx, dx
+  sub     cl, al
+  inc     cx
+  add     si, dx
 
   insert_into_call_loop:
-    mov bh, [si]
-    mov byte[si + 1], bh
-    dec si
+    mov  bh,           [si]
+    mov  byte[si + 1], bh
+    dec  si
     loop insert_into_call_loop
 
   mov byte[si + 1], ah
@@ -352,7 +352,7 @@ find_char_pos_call:
   push cx
 
   get_len si
-  mov cx, dx
+  mov     cx, dx
 
   mov dh, 0
   mov dl, 0
@@ -362,25 +362,25 @@ find_char_pos_call:
   find_char_pos_call_loop:
     inc bh
     cmp [si], ah
-    jz find_char_pos_call_inc_couter
+    jz  find_char_pos_call_inc_couter
     jnz find_char_pos_call_else
 
     find_char_pos_call_inc_couter:
       inc dl
       mov dh, bh
       cmp dl, al
-      jz find_char_pos_call_end
+      jz  find_char_pos_call_end
 
     find_char_pos_call_else:
 
 
-    inc si
+    inc  si
     loop find_char_pos_call_loop
 
   cmp al, 0
-  jz find_char_pos_call_end
+  jz  find_char_pos_call_end
   cmp al, dl
-  jz find_char_pos_call_end
+  jz  find_char_pos_call_end
 
   mov dx, 0
 

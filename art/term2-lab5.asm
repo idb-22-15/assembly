@@ -6,9 +6,9 @@
 %endmacro
 
 segment .code
-org 100h
+org     100h
 
-call clear_screen
+call    clear_screen
 ; call proc44
 ; call proc45
 ; call proc46
@@ -17,8 +17,8 @@ call clear_screen
 ; call proc49
 ; call proc50
 
-mov ax, 4C00h
-int 21h
+mov     ax, 4C00h
+int     21h
 
 ;procedures
 
@@ -32,9 +32,9 @@ ret
 proc44:
 	mov dl, 5
 
-	add dl, 48
-	mov byte[0], dl
-	mov byte[1], "$"
+	add       dl,      48
+	mov       byte[0], dl
+	mov       byte[1], "$"
 	print_str 0
 ret
 
@@ -43,13 +43,13 @@ proc45:
 	mov dl, 11
 
 	cmp dl, 10
-	js not_gap45
+	js  not_gap45
 		add dl, 7
 
 	not_gap45:
-	add dl, 48
-	mov byte[0], dl
-	mov byte[1], "$"
+	add       dl,      48
+	mov       byte[0], dl
+	mov       byte[1], "$"
 	print_str 0
 ret
 
@@ -63,8 +63,8 @@ proc46:
 		mov al, 65
 
 	m46:
-	mov byte[0], al
-	mov byte[1], "$"
+	mov       byte[0], al
+	mov       byte[1], "$"
 	print_str 0
 ret
 
@@ -87,9 +87,9 @@ proc47:
             sub cx, 7
 
         not_gap47:
-        mov byte[bx], al
-        inc al
-        inc bx
+        mov  byte[bx], al
+        inc  al
+        inc  bx
         loop loop47
     mov byte[bx], '$'
 
@@ -104,7 +104,7 @@ proc48:
         int 21h
 
         cmp al, '$'
-        jz end_while48
+        jz  end_while48
 
         mov byte[si], ' '
         inc si
@@ -112,7 +112,7 @@ proc48:
         jmp do_while_string48
 
     end_while48:
-        mov byte[si], '$'
+        mov       byte[si], '$'
         print_str 0
 ret
 
@@ -124,8 +124,8 @@ proc49:
         mov ah, 01h
         int 21h
 
-        mov byte[si], al
-        inc si
+        mov  byte[si], al
+        inc  si
         loop input5char
     mov byte[si], '$'
 
@@ -136,10 +136,10 @@ proc49:
         mov al, byte[si]
         mov ah, byte[si + bx]
 
-        mov byte[si], ah
-        mov byte[si + bx], al
-        inc si
-        sub bx, 2
+        mov  byte[si],      ah
+        mov  byte[si + bx], al
+        inc  si
+        sub  bx,            2
         loop reverse
 
     print_str 0
@@ -151,7 +151,7 @@ proc50:
     int 21h
 
     cmp al, 97
-    js not_lower
+    js  not_lower
 
     cmp al, 123
     jns not_lower
