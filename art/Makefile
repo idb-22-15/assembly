@@ -7,7 +7,7 @@ all: linux
 
 
 lab:
-	${ASMC} -f bin -g term3-lab1.asm -o lab.com && dosbox ./ -fullscreen
+	${ASMC} -f bin -g term3-lab2.asm -o lab.com && dosbox ./
 
 lablinux:
 	${ASMC} -f elf64 -g term3-lab1.asm -o lab.com
